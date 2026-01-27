@@ -16,7 +16,7 @@
           {
             "group": "Getting started",
             "pages": [
-              "index",
+              "introduction",
               "tech-stack",
               "development"
             ]
