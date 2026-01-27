@@ -17,23 +17,23 @@
             "group": "Getting started",
             "pages": [
               "index",
-              "quickstart",
+              "tech-stack",
               "development"
             ]
           },
           {
-            "group": "Projects",
-            "pages": ["network-intel"]
+            "group": "Project Overview",
+            "pages": ["Project Overview"]
           },
           {
-            "group": "Customization",
+            "group": "WIP - Customization",
             "pages": [
               "essentials/settings",
               "essentials/navigation"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "WIP - Writing content",
             "pages": [
               "essentials/markdown",
               "essentials/code",
@@ -42,7 +42,7 @@
             ]
           },
           {
-            "group": "AI tools",
+            "group": "WIP - AI tools",
             "pages": [
               "ai-tools/cursor",
               "ai-tools/claude-code",
@@ -52,16 +52,16 @@
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "WIP - API reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "WIP - API documentation",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "WIP - Endpoint examples",
             "pages": [
               "api-reference/endpoint/get",
               "api-reference/endpoint/create",

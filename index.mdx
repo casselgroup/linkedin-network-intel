@@ -1,97 +1,48 @@
 ---
 title: "Introduction"
-description: "Welcome to the new home for your documentation"
+description: "LinkedIn Network Intel: DuckDB + MotherDuck + repeatable exports, documented with Mintlify."
 ---
 
-## Setting up
 
-Get your documentation site up and running in minutes.
+# LinkedIn Network Intel
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+A small, shippable “network intel” pipeline for your LinkedIn connections export.
 
-## Make it yours
+It’s meant to demonstrate practical technical fluency in a sales context: ingest data, model it cleanly, generate outputs, document it well.
 
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={3}>
+  <Card title="Tech stack" icon="cpu" href="/tech-stack">
+    Tools used in this project and why each one was chosen.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
-  </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
 
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+  <Card title="Project deep dive" icon="diagram-project" href="/network-intel">
+    Architecture, schema, views, and query pack details.
   </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
 
-## Need inspiration?
+  <Card title="Development" icon="wrench" href="/development">
+    Local docs workflow and how to iterate safely.
+  </Card>
+</CardGroup>
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+
+<hr />
+
+## What it does
+
+<CardGroup cols={2}>
+  <Card title="1) Ingest" icon="database">
+    Upload a LinkedIn connections CSV into MotherDuck.
+  </Card>
+
+  <Card title="2) Model" icon="table">
+    Build clean tables/views and a query pack for repeatable analysis.
+  </Card>
+
+  <Card title="3) Analyze" icon="magnifying-glass">
+    Answer job-search questions like “who should I talk to next?”
+  </Card>
+
+  <Card title="4) Export" icon="file-csv">
+    Generate CSV outputs you can share or reuse in follow-on workflows.
+  </Card>
+</CardGroup>

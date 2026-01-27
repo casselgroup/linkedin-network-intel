@@ -1,0 +1,115 @@
+---
+title: "Tech stack"
+description: "The tools behind LinkedIn Network Intel and why each one was chosen."
+---
+
+# Tech stack
+
+This project is intentionally small and shippable.
+
+Each tool was picked for a specific constraint: fast iteration, low ops overhead, and a workflow that mirrors how modern teams actually build and share “technical GTM” artifacts.
+
+<CardGroup cols={2}>
+  <Card title="Data source" icon="table">
+    LinkedIn connections export
+  </Card>
+  <Card title="Database" icon="database">
+    MotherDuck (DuckDB in the cloud)
+  </Card>
+  <Card title="Editor" icon="code">
+    Cursor
+  </Card>
+  <Card title="Docs" icon="book-open">
+    Mintlify
+  </Card>
+</CardGroup>
+
+---
+
+## LinkedIn connections export
+
+### Why LinkedIn
+- It’s a real dataset most AEs already have access to.
+- It’s naturally “messy,” which is useful for demonstrating cleaning and modeling.
+- The output is immediately actionable for a job search: who to contact, which companies repeat, and where warm paths exist.
+
+### What we use from it
+- People, companies, titles, and connection dates
+- A repeatable CSV structure (LinkedIn export)
+
+### Tradeoffs
+- Not an API-first source.
+- Exports can vary slightly by locale and LinkedIn changes.
+- Company names are not normalized.
+
+---
+
+## MotherDuck (DuckDB + cloud)
+
+### Why MotherDuck
+- I like Ducks
+- DuckDB makes analytics on CSVs feel lightweight and fast.
+- MotherDuck keeps the “local-first” feel but adds persistence and sharing.
+- It’s the right level of infrastructure for a repeatable pipeline without spinning up Postgres, Snowflake, or BigQuery.
+- You can never have enough ducks (seriously)
+
+### What we use it for
+- Staging raw CSV imports
+- Building clean tables and views
+- Running the query pack that generates exports
+
+### Why not Postgres or a warehouse
+- More setup and ops overhead than the problem needs.
+- Harder to keep the project “clone and run” for someone reviewing it.
+
+### Tradeoffs
+- You still need to be disciplined about schema and views.
+- Sharing is easy, but access management matters if you load private data.
+
+---
+
+## Cursor (code editor)
+
+### Why Cursor
+- Fast iteration in a codebase with an assistant that understands context.
+- Great for small pipelines where you want momentum without over-engineering.
+- Useful for documenting decisions as you build.
+
+### What we use it for
+- Writing ingestion + transform scripts
+- Maintaining query packs
+- Keeping docs and code changes in lockstep
+
+### Tradeoffs
+- AI assistance is only as good as your prompts and review habits.
+- Easy to accidentally accept changes you don’t fully understand.
+
+---
+
+## Mintlify (documentation)
+
+### Why Mintlify
+- Clean docs UX out of the box (search, nav, theming, components like cards)
+- MDX support makes “docs as product” feel natural
+- Simple deploy path and a workflow that matches modern developer-facing teams
+
+### What we use it for
+- Explaining the pipeline and architecture
+- Publishing the schema, views, and query pack patterns
+- Making the project reviewable in 2–5 minutes
+
+### Tradeoffs
+- You need to follow MDX rules carefully (frontmatter + component syntax).
+- Icons must match Mintlify’s supported icon set.
+
+---
+
+## How these pieces fit together
+
+1. Export connections data from LinkedIn
+2. Load into MotherDuck
+3. Model into clean views and run analysis queries
+4. Export outputs (CSV) for reuse
+5. Document decisions and workflow in Mintlify
+
+If you want to see the implementation details next, go to **LinkedIn Network Intelligence**.

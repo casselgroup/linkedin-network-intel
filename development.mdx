@@ -1,94 +1,130 @@
 ---
-title: 'Development'
-description: 'Preview changes locally to update your docs'
+title: "Development / Methodology"
+description: "Shipped fast with one table, while setting up a clean path to add modeling and transforms later."
 ---
 
-<Info>
-  **Prerequisites**:
-  - Node.js version 19 or higher
-  - A docs repository with a `docs.json` file
-</Info>
+# How I built v1
 
-Follow these steps to install and run Mintlify on your operating system.
+v1 is intentionally minimal: it takes a LinkedIn connections export and loads it into **MotherDuck** so I can run repeatable queries and generate job-search outputs.
 
-<Steps>
-<Step title="Install the Mintlify CLI">
+I optimized for two things:
+- **Ship an MVP quickly** (prove end-to-end execution).
+- **Keep the structure extensible** (so modeling and transforms are easy to add later).
 
-```bash
-npm i -g mint
-```
-</Step>
+---
 
-<Step title="Preview locally">
+## What “v1” includes
 
-Navigate to your docs directory where your `docs.json` file is located, and run the following command:
+<CardGroup cols={2}>
+  <Card title="Single-table ingest" icon="database">
+    Load the LinkedIn connections CSV into one table, with the raw columns intact.
+  </Card>
 
-```bash
-mint dev
-```
+  <Card title="Query pack" icon="terminal">
+    A set of queries that answer job-search questions and can be re-run after each export.
+  </Card>
 
-A local preview of your documentation will be available at `http://localhost:3000`.
+  <Card title="Export outputs" icon="file-csv">
+    Generate CSV outputs that support the job-search workflow.
+  </Card>
 
-</Step>
-</Steps>
+  <Card title="Docs + structure" icon="gear">
+    A repo + docs structure that makes it straightforward to add more tables, views, and data sources.
+  </Card>
+</CardGroup>
 
-## Custom ports
+---
 
-By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. For example, to run Mintlify on port 3333, use this command:
+## V1 Does Not include
 
-```bash
-mint dev --port 3333
-```
+### Additional non-connections data available from a linkedin export
+Because I wanted to ship a V1 quickly, I did **not** include most of the data available via linkedin export.
 
-If you attempt to run Mintlify on a port that's already in use, it will use the next available port:
+That was a deliberate decision to keep v1 small and get to working outputs fast, while leaving plenty of potential roadmap items. 
 
-```md
-Port 3000 is already in use. Trying 3001 instead.
-```
+---
 
-## Mintlify versions
+## What I did that makes transformations easy later
 
-Please note that each CLI release is associated with a specific version of Mintlify. If your local preview does not align with the production version, please update the CLI:
+I made a few choices that keep the door open for a real model layer in v2.
 
-```bash
-npm mint update
-```
+### 1) Kept “raw ingest” conceptually separate
+The v1 table is treated as **raw**.
 
-## Validating links
+That makes it easy to introduce:
+- `stg_*` (light cleanup) tables
+- `dim_*` and `fct_*` tables
+- `*_v` views that become the contract for queries
 
-The CLI can assist with validating links in your documentation. To identify any broken links, use the following command:
+without breaking the mental model of the pipeline.
 
-```bash
-mint broken-links
-```
+### 2) Wrote queries as named, repeatable assets
+Queries live as a “query pack” rather than ad-hoc SQL.
 
-## Deployment
+That matters because when more complex transformations are needed, I can:
+- redirect queries to new views/tables
+- keep the query intent the same
+- validate outputs didn’t regress
 
-If the deployment is successful, you should see the following:
+### 3) Designed exports around job-search questions
+I anchored outputs to questions like:
+- “Who should I talk to next?”
+- “Which companies show up most in my network?”
+- “Which connections match my target personas?”
 
-<Frame>
-  <img src="/images/checks-passed.png" alt="Screenshot of a deployment confirmation message that says All checks have passed." style={{ borderRadius: '0.5rem' }} />
-</Frame>
+### 4) Left clear extension points
+I set up the repo/docs so it’s obvious where v2 additions go:
+- add data sources
+- add new tables/views
+- add new queries
+- add new exports
 
-## Code formatting
+This reduces friction when the project grows beyond one table.
 
-We suggest using extensions on your IDE to recognize and format MDX. If you're a VSCode user, consider the [MDX VSCode extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
+---
 
-## Troubleshooting
+## How I built it (sequence)
 
-<AccordionGroup>
-  <Accordion title='Error: Could not load the "sharp" module using the darwin-arm64 runtime'>
+### 1) Define the outputs first
+I started by listing the CSV outputs I wanted for the job search.
 
-    This may be due to an outdated version of node. Try the following:
-    1. Remove the currently-installed version of the CLI: `npm remove -g mint`
-    2. Upgrade to Node v19 or higher.
-    3. Reinstall the CLI: `npm i -g mint`
-  </Accordion>
+Then I wrote the SQL needed to generate them from a single table.
+Only after that did I worry about structure and documentation.
 
-  <Accordion title="Issue: Encountering an unknown error">
-  
-    Solution: Go to the root of your device and delete the `~/.mintlify` folder. Then run `mint dev` again.
-  </Accordion>
-</AccordionGroup>
+### 2) Make ingestion reliable
+I focused on getting a clean, repeatable load into a DB so the analysis wasn’t “spreadsheet brittle.”
 
-Curious about what changed in the latest CLI version? Check out the [CLI changelog](https://www.npmjs.com/package/mintlify?activeTab=versions).
+### 3) Encode the job-search questions as queries
+I captured each question as a named query so the workflow is repeatable after each LinkedIn export refresh.
+
+### 4) Add docs while building
+I documented the workflow and the extension points while the decisions were fresh.
+
+---
+
+## What I’d add next (where transforms start)
+
+<CardGroup cols={2}>
+  <Card title="Staging cleanup" icon="table">
+    A `stg_connections` layer for light type cleanup and column standardization.
+  </Card>
+
+  <Card title="Company normalization" icon="wand-magic-sparkles">
+    Basic entity resolution for company names/domains to enable stronger joins.
+  </Card>
+
+  <Card title="Additional datasets" icon="plus">
+    Add Crunchbase, job postings, or CRM exports to support richer analysis.
+  </Card>
+
+  <Card title="Views as the contract" icon="layers">
+    Introduce stable views so query outputs stay consistent as the schema evolves.
+  </Card>
+</CardGroup>
+
+---
+
+## Where to go next
+
+- Tool overview: <a href="/network-intel">Project deep dive</a>
+- Tools and rationale: <a href="/tech-stack">Tech stack</a>
