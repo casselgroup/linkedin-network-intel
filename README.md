@@ -1,43 +1,84 @@
-# Mintlify Starter Kit
+---
+title: Project Overview
+description: Using DuckDB and MotherDuck to analyze a LinkedIn connections export for job-search insights
+---
 
-Use the starter kit to get your docs deployed and ready to customize.
+## What this is
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+This project turns a raw LinkedIn connections export into a lightweight analytics layer for job search and networking.
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+It uses:
+- DuckDB for local querying
+- MotherDuck for persistence and sharing
+- Mintlify for documentation
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+The goal is to answer practical questions like:
+- Which companies am I most connected to?
+- Where do I have multiple warm paths?
+- Which GTM leaders are already in my network?
+- Who have I connected with most recently?
 
-## Development
+---
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
+## Data source
 
+The data comes from a full LinkedIn connections export (CSV), uploaded into MotherDuck as a table named:
+`linkedin_intel.main.connections`
+
+
+The raw table is intentionally left untouched.
+
+---
+
+## Semantic layer
+
+A cleaned view is defined in `sql/00_views.sql`:
+
+- Normalizes column names
+- Converts connection dates to a proper `DATE`
+- Trims empty strings
+- Creates a stable interface for downstream queries
+
+```sql
+CREATE OR REPLACE VIEW connections_clean AS
+SELECT
+  "First Name" AS first_name,
+  "Last Name"  AS last_name,
+  "URL"        AS linkedin_url,
+  "Email Address" AS email,
+  NULLIF(TRIM("Company"), '')  AS company,
+  NULLIF(TRIM("Position"), '') AS title,
+  try_strptime("Connected On", '%d-%b-%y')::DATE AS connected_on
+FROM linkedin_intel.main.connections;
 ```
-npm i -g mint
-```
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+## Core queries
 
-```
-mint dev
-```
+Queries are organized by intent:
 
-View your local preview at `http://localhost:3000`.
+- `sql/10_company_insights.sql`
+  - Companies with the most connections
+  - Multi-threading opportunities
 
-## Publishing changes
+- `sql/20_people_insights.sql`
+  - Common titles and personas
+  - Recent connections
+  - GTM leadership mapping
+  - Data quality checks
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+These queries are designed to be run directly in DuckDB or the MotherDuck UI.
 
-## Need help?
+## Why this matters
 
-### Troubleshooting
+This approach mirrors how modern analytics teams work:
 
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
+- Raw data is immutable
+- Business logic lives in views
+- Questions are encoded as versioned SQL
+- Documentation lives alongside the code
 
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+It’s fast to build, easy to extend, and useful immediately.
+
+
+
+
