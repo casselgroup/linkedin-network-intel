@@ -22,6 +22,10 @@
             ]
           },
           {
+            "group": "Projects",
+            "pages": ["network-intel"]
+          },
+          {
             "group": "Customization",
             "pages": [
               "essentials/settings",

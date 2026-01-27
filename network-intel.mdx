@@ -1,0 +1,84 @@
+---
+title: LinkedIn Network Intelligence
+description: Using DuckDB and MotherDuck to analyze a LinkedIn connections export for job-search insights
+---
+
+## What this is
+
+This project turns a raw LinkedIn connections export into a lightweight analytics layer for job search and networking.
+
+It uses:
+- DuckDB for local querying
+- MotherDuck for persistence and sharing
+- Mintlify for documentation
+
+The goal is to answer practical questions like:
+- Which companies am I most connected to?
+- Where do I have multiple warm paths?
+- Which GTM leaders are already in my network?
+- Who have I connected with most recently?
+
+---
+
+## Data source
+
+The data comes from a full LinkedIn connections export (CSV), uploaded into MotherDuck as a table named:
+`linkedin_intel.main.connections`
+
+
+The raw table is intentionally left untouched.
+
+---
+
+## Semantic layer
+
+A cleaned view is defined in `sql/00_views.sql`:
+
+- Normalizes column names
+- Converts connection dates to a proper `DATE`
+- Trims empty strings
+- Creates a stable interface for downstream queries
+
+```sql
+CREATE OR REPLACE VIEW connections_clean AS
+SELECT
+  "First Name" AS first_name,
+  "Last Name"  AS last_name,
+  "URL"        AS linkedin_url,
+  "Email Address" AS email,
+  NULLIF(TRIM("Company"), '')  AS company,
+  NULLIF(TRIM("Position"), '') AS title,
+  try_strptime("Connected On", '%d-%b-%y')::DATE AS connected_on
+FROM linkedin_intel.main.connections;
+```
+
+## Core queries
+
+Queries are organized by intent:
+
+- `sql/10_company_insights.sql`
+  - Companies with the most connections
+  - Multi-threading opportunities
+
+- `sql/20_people_insights.sql`
+  - Common titles and personas
+  - Recent connections
+  - GTM leadership mapping
+  - Data quality checks
+
+These queries are designed to be run directly in DuckDB or the MotherDuck UI.
+
+## Why this matters
+
+This approach mirrors how modern analytics teams work:
+
+- Raw data is immutable
+- Business logic lives in views
+- Questions are encoded as versioned SQL
+- Documentation lives alongside the code
+
+It’s fast to build, easy to extend, and useful immediately.
+
+
+
+
