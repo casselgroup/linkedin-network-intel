@@ -8,4 +8,4 @@ SELECT
   NULLIF(TRIM("Company"), '')   AS company,
   NULLIF(TRIM("Position"), '')  AS title,
   try_strptime("Connected On", '%d-%b-%y')::DATE AS connected_on
-FROM linkedin_intel.main.connections;
+FROM connections_source;
