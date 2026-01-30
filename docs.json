@@ -23,54 +23,12 @@
           },
           {
             "group": "Project Overview",
-            "pages": ["Project Overview"]
+            "pages": ["project-overview"]
           },
-          {
-            "group": "WIP - Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "WIP - Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "WIP - AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
+
         ]
       },
-      {
-        "tab": "WIP - API reference",
-        "groups": [
-          {
-            "group": "WIP - API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "WIP - Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
-          }
-        ]
-      }
+
     ],
     "global": {
       "anchors": [
