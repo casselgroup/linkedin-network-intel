@@ -23,7 +23,7 @@
           },
           {
             "group": "Project Overview",
-            "pages": ["Project Overview"]
+            "pages": ["project-overview"]
           },
           {
             "group": "WIP - Customization",
